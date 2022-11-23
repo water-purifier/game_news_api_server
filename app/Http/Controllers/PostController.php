@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::select('id','title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+        $posts = Post::select('id','title_cn','title_en','description_cn','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
             ->where('title_en','<>','','and')
             ->where('title_cn','<>','','and')
             ->orderBy('created_at', 'desc')
@@ -30,7 +30,7 @@ class PostController extends Controller
         $limit = $request->query('limit');
         if(!$start) $start=0;
         if(!$limit) $limit=10;
-        $posts = Post::select('id','title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+        $posts = Post::select('id','title_cn','title_en','description_cn','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
             ->where('title_en','<>','','and')
             ->where('title_cn','<>','','and')
             ->orderBy('created_at', 'desc')
@@ -124,7 +124,7 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        $post = Post::select('id','title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+        $post = Post::select('id','title_cn','title_en','description_cn','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
             ->where('id', $id)
             ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
             ->first();
@@ -138,7 +138,6 @@ class PostController extends Controller
             DB::update('update posts set view_count=view_count+1 where id = ?', [$post->id]);
             return response()->json(
                 $post
-//                ['post'=>$post],
             );
         }
 
