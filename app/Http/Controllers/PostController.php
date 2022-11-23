@@ -13,8 +13,10 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')
-            ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
+        $posts = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+            ->where('title_en','<>','','and')
+            ->orderBy('created_at', 'desc')
+            ->with(['user:name,user_id,id,email', 'comments', 'images:image_url', 'tags:tag_name_en'])
             ->paginate(10);
         return response()->json(
             $posts
@@ -27,7 +29,9 @@ class PostController extends Controller
         $limit = $request->query('limit');
         if(!$start) $start=0;
         if(!$limit) $limit=10;
-        $posts = Post::orderBy('created_at', 'desc')
+        $posts = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+            ->where('title_en','<>','','and')
+            ->orderBy('created_at', 'desc')
             ->skip($start)
             ->take($limit)
             ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
@@ -38,7 +42,10 @@ class PostController extends Controller
     }
 
     public function index_paths(){
-        $posts = DB::select('select id,title_cn from posts order by created_at desc');
+        $posts = Post::select('id','title_en')
+            ->where('title_en','<>','','and')
+            ->orderBy('created_at','desc')
+            ->get();
         return response()->json(
             $posts
         );
@@ -63,21 +70,27 @@ class PostController extends Controller
             'page_tags',
             'page_images',
         ]);
-        $post = new Post();
-        $post->url_ori = $params['page_url'];
-        $post->title_en = $params['page_title_en'];
-        $post->title_ko = $params['page_title_ko'];
-        $post->title_cn = $params['page_title_cn'];
-        $post->description_en = $params['page_description_en'];
-        $post->description_ko = $params['page_description_ko'];
-        $post->description_cn = $params['page_description_cn'];
-        $post->author_ori = $params['page_author'];
-        $post->date_ori = $params['page_date'];
-        $post->text_html = $params['page_text_html'];
-        $post->text_en = $params['page_text_en'];
-        $post->text_ko = $params['page_text_ko'];
-        $post->text_cn = $params['page_text_cn'];
-        $post->save();
+
+        $post = Post::updateOrCreate(
+            [
+                'url_ori' => $params['page_url'],
+                'title_en' => $params['page_title_en'],
+                'title_ko' => $params['page_title_ko'],
+                'title_cn' => $params['page_title_cn'],
+                'description_en' => $params['page_description_en'],
+                'description_ko' => $params['page_description_ko'],
+                'description_cn' => $params['page_description_cn'],
+                'author_ori' => $params['page_author'],
+                'date_ori' => $params['page_date'],
+                'text_html' => $params['page_text_html'],
+                'text_en' => $params['page_text_en'],
+                'text_ko' => $params['page_text_ko'],
+                'text_cn' => $params['page_text_cn'],
+            ],
+            [
+                'url_ori'=>$params['page_url']
+            ],
+        );
 
         foreach ($params['page_images'] as $page_image) {
             $image = new Image();
@@ -110,7 +123,8 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        $post = Post::where('id', $id)
+        $posts = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+            ->where('id', $id)
             ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
             ->first();
         if (!$post) {

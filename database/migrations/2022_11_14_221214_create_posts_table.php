@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('description_en')->nullable();
             $table->string('description_ko')->nullable();
             $table->string('description_cn')->nullable();
-            $table->text('text_html')->nullable();
-            $table->text('text_en')->nullable();
-            $table->text('text_ko')->nullable();
-            $table->text('text_cn')->nullable();
+            $table->longText('text_html')->nullable();
+            $table->longText('text_en')->nullable();
+            $table->longText('text_ko')->nullable();
+            $table->longText('text_cn')->nullable();
             $table->string('author_ori')->nullable();
             $table->string('date_ori')->nullable();
             $table->string('url_ori')->nullable();
