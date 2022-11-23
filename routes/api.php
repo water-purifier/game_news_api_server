@@ -18,11 +18,13 @@ use App\Http\Controllers\PostController;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['cors'])->group(function (){
+    Route::get('/posts',[PostController::class,'index']);
+    Route::get('/posts_infinity',[PostController::class,'index_limit']);
+    Route::get('/posts_paths',[PostController::class,'index_paths']);
+    Route::post('/posts',[PostController::class,'store']);
+    Route::get('/posts/{id}',[PostController::class,'show']);
+    Route::post('/posts/search',[PostController::class,'search']);
+    Route::post('posts/tag',[PostController::class,'tag']);
+});
 
-Route::get('/posts',[PostController::class,'index']);
-Route::get('/posts_infinity',[PostController::class,'index_limit']);
-Route::get('/posts_paths',[PostController::class,'index_paths']);
-Route::post('/posts',[PostController::class,'store']);
-Route::get('/posts/{id}',[PostController::class,'show']);
-Route::post('/posts/search',[PostController::class,'search']);
-Route::post('posts/tag',[PostController::class,'tag']);
