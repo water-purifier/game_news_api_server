@@ -14,7 +14,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
-            ->where('title_en','<>','','and')
+            ->where('title_cn','<>','','and')
             ->orderBy('created_at', 'desc')
             ->with(['user:name,user_id,id,email', 'comments', 'images:image_url', 'tags:tag_name_en'])
             ->paginate(10);
@@ -30,7 +30,7 @@ class PostController extends Controller
         if(!$start) $start=0;
         if(!$limit) $limit=10;
         $posts = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
-            ->where('title_en','<>','','and')
+            ->where('title_cn','<>','','and')
             ->orderBy('created_at', 'desc')
             ->skip($start)
             ->take($limit)
@@ -42,13 +42,11 @@ class PostController extends Controller
     }
 
     public function index_paths(){
-        $posts = Post::select('id','title_en')
-            ->where('title_en','<>','','and')
+        $posts = Post::select('id','title_cn')
+            ->where('title_cn','<>','','and')
             ->orderBy('created_at','desc')
             ->get();
-        return response()->json(
-            $posts
-        );
+        return response()->json($posts);
     }
 
     public function store(Request $request)
