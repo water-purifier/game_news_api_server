@@ -123,7 +123,7 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        $posts = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+        $post = Post::select('title_cn','title_en','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
             ->where('id', $id)
             ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
             ->first();
