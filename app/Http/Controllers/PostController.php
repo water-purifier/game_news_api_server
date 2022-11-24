@@ -64,6 +64,7 @@ class PostController extends Controller
             'page_description_cn',
             'page_author',
             'page_date',
+            'page_pid',
             'page_text_html',
             'page_text_en',
             'page_text_ko',
@@ -74,7 +75,6 @@ class PostController extends Controller
 
         $post = Post::updateOrCreate(
             [
-                'url_ori' => $params['page_url'],
                 'title_en' => $params['page_title_en'],
                 'title_ko' => $params['page_title_ko'],
                 'title_cn' => $params['page_title_cn'],
@@ -83,15 +83,15 @@ class PostController extends Controller
                 'description_cn' => $params['page_description_cn'],
                 'author_ori' => $params['page_author'],
                 'date_ori' => $params['page_date'],
+                'url_ori' => $params['page_url'],
+                'pid' => $params['page_pid'],
                 'text_html' => $params['page_text_html'],
                 'text_en' => $params['page_text_en'],
                 'text_ko' => $params['page_text_ko'],
                 'text_cn' => $params['page_text_cn'],
-            ],
-            [
-                'url_ori'=>$params['page_url']
-            ],
+            ],['pid']
         );
+
 
         foreach ($params['page_images'] as $page_image) {
             $image = new Image();
@@ -104,8 +104,7 @@ class PostController extends Controller
         $ids = [];
         foreach ($params['page_tags'] as $page_tag) {
             $tag = Tag::updateOrCreate(
-                ['tag_name_en' => $page_tag],
-                ['tag_name_en' => $page_tag],
+                ['tag_name_en' => $page_tag],['tag_name_en']
             );
 //            $tag = new Tag();
 //            $tag->tag_name_en = $page_tag;

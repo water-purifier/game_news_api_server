@@ -25,6 +25,7 @@ class Post extends Model
         'view_count',
         'is_view',
         'url_ori',
+        'pid',
         'author_ori',
         'date_ori',
     ];

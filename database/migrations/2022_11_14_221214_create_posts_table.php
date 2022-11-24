@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('author_ori')->nullable();
             $table->string('date_ori')->nullable();
             $table->string('url_ori')->nullable();
+            $table->string('pid',50)->default('0000-0000000');
             $table->foreignId('user_id')->nullable();
             $table->foreignId('category_id')->nullable();
             $table->integer('thumbs_up')->default(0);
