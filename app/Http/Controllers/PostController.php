@@ -73,7 +73,12 @@ class PostController extends Controller
             'page_images',
         ]);
 
-        $post = Post::updateOrCreate(
+        $post = Post::where('pid',$params['page_pid'])->first();
+        if($post){
+            return response()->json(['message'=>'record exists'],202);
+        }
+
+        $post = Post::Create(
             [
                 'title_en' => $params['page_title_en'],
                 'title_ko' => $params['page_title_ko'],
@@ -89,7 +94,7 @@ class PostController extends Controller
                 'text_en' => $params['page_text_en'],
                 'text_ko' => $params['page_text_ko'],
                 'text_cn' => $params['page_text_cn'],
-            ],['pid']
+            ]
         );
 
 
