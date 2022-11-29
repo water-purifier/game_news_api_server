@@ -43,6 +43,22 @@ class PostController extends Controller
         );
     }
 
+    public function index_sitemap(Request $request)
+    {
+        $limit = $request->query('limit');
+        if(!$limit) $limit=1000;
+        $posts = Post::select('id')
+            ->where('title_en','<>','','and')
+            ->where('title_cn','<>','','and')
+            ->orderBy('created_at', 'desc')
+            ->take($limit)
+            ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
+            ->get();
+        return response()->json(
+            $posts
+        );
+    }
+
     public function index_paths(){
         $posts = Post::select('id','title_en')
             ->where('title_en','<>','','and')
