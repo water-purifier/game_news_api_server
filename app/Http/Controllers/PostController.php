@@ -145,7 +145,7 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        $post = Post::select('id','title_cn','title_en','description_cn','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','created_at')
+        $post = Post::select('id','title_cn','title_en','description_cn','text_cn','author_ori','date_ori','view_count','thumbs_up','thumbs_down','url_ori','created_at')
             ->where('id', $id)
             ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
             ->first();
