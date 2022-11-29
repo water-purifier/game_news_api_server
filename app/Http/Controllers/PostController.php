@@ -47,13 +47,14 @@ class PostController extends Controller
     {
         $limit = $request->query('limit');
         if(!$limit) $limit=1000;
-        $posts = Post::select('id')
-            ->where('title_en','<>','','and')
-            ->where('title_cn','<>','','and')
-            ->orderBy('created_at', 'desc')
-            ->take($limit)
-            ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
-            ->get();
+//        $posts = Post::select('id')
+//            ->where('title_en','<>','','and')
+//            ->where('title_cn','<>','','and')
+//            ->orderBy('created_at', 'desc')
+//            ->take($limit)
+//            ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
+//            ->get();
+        $posts = DB::select('select id from posts where title_cn <> "" and title_en <> "" order by created_at desc limit ? ',[$limit]);
         return response()->json(
             $posts
         );
