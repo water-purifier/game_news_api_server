@@ -54,7 +54,7 @@ class PostController extends Controller
 //            ->take($limit)
 //            ->with(['user:name,user_id,id,email', 'comments', 'images', 'tags'])
 //            ->get();
-        $posts = DB::select('select id from posts where title_cn <> "" and title_en <> "" order by created_at desc limit ? ',[$limit]);
+        $posts = DB::select('select id,updated_at from posts where title_cn <> "" and title_en <> "" order by created_at desc limit ? ',[$limit]);
         return response()->json(
             $posts
         );
